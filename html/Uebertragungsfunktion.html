@@ -1,0 +1,269 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Uebertragungsfunktion</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-09-30"><meta name="DC.source" content="Uebertragungsfunktion.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%Reibenwein Lukas 5AHEL KN 16 Uebertragungsfunktion.m</span>
+<span class="keyword">function</span>[]= Uebertragungsfunktion(KN,fstart,fende,Resx)
+<span class="comment">%KN: Katalognummer Sch&uuml;ler</span>
+<span class="comment">%fstart, fende: Bestimmen Frequenzbereich, in dem simuliert wird</span>
+<span class="comment">%Resx: Anzahl Datenpunkte auf der x-Achse</span>
+
+<span class="comment">%Berechnet R, L und C</span>
+R=KN*1000;
+L=KN*0.0001;
+C=KN*0.0000001;
+
+<span class="comment">%Berechnet Array mit allen (Kreis-)Frequenzwerten zwischen fstart und fende</span>
+<span class="comment">%Aufl&ouml;sung: (fende-fstart)/Resx</span>
+f=fstart:(fende-fstart)/Resx:fende;
+w=2*pi*f;
+
+<span class="comment">%Bestimmt welches Beispiel ausgew&auml;hlt wird</span>
+x=mod(KN,12);
+
+<span class="keyword">for</span> i=1:1:Resx+1
+
+    <span class="comment">%Berechnet komplexen Widerstand von L und C bei der aktuellen Frequenz</span>
+    XL=1i*w(i)*L;
+    XC=(-1i)/(w(i)*C);
+
+    <span class="comment">%Berechnet, abh&auml;ngig von der KN eine andere &Uuml;bertragungsfunktion</span>
+    <span class="keyword">if</span> x==1
+        <span class="comment">%RC-TP</span>
+        H(i)=XC/(R+XC);
+    <span class="keyword">elseif</span> x==2
+        <span class="comment">%RL-HP</span>
+        H(i)=XL/(R+XL);
+    <span class="keyword">elseif</span> x==3
+        <span class="comment">%RC-TP+Rp</span>
+        H(i)=(1/(1/R+1/XC))/(R+(1/(1/R+1/XC)));
+    <span class="keyword">elseif</span> x==4
+        <span class="comment">%RC-HP+Rp</span>
+        H(i)=(1/(1/R+1/XL))/(R+(1/(1/R+1/XL)));
+    <span class="keyword">elseif</span> x==5
+        <span class="comment">%Serienschwingkreis</span>
+        H(i)=R+XL+XC;
+    <span class="keyword">elseif</span> x==6
+        <span class="comment">%Parallelschwingkreis</span>
+        H(i)=1/(1/R+1/XL+1/XC);
+    <span class="keyword">elseif</span> x==7
+        <span class="comment">%CRC-Netzwerk</span>
+        H(i)=XC/(1/(1/XC+1/(XC+R)));
+    <span class="keyword">elseif</span> x==8
+        <span class="comment">%RCR-Netzwerk</span>
+        H(i)=(R+XC)/(R+XC);
+    <span class="keyword">elseif</span> x==9
+        <span class="comment">%LRL-Netzwerk</span>
+        H(i)=XL/(1/(1/XL+1/(XL+R)));
+    <span class="keyword">elseif</span> x==10
+        <span class="comment">%RLR-Netzwerk</span>
+        H(i)=(R+XL)/(R+XL);
+    <span class="keyword">elseif</span> x==11
+        <span class="comment">%CLC-Netzwerk(Serien+Parallelschwingkreis)</span>
+        H(i)=XC/(1/(1/XC+1/(XC+XL)));
+    <span class="keyword">elseif</span> x==0
+        <span class="comment">%LCL-Netzwerk(Serien+Parallelschwingkreis)</span>
+        H(i)=XL/(1/(1/XL+1/(XL+XC)));
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">%Teilt die komplexe Gr&ouml;&szlig;e in Real- und Imagin&auml;rteil</span>
+mag=abs(H);
+phase=angle(H);
+
+<span class="comment">%w&auml;hlt Subplot 1 aus</span>
+subplot(2,1,1);
+
+<span class="comment">%Bei Bsp 5&amp;6 Z(jw), da komplexer Widerstand gefragt</span>
+<span class="comment">%Beim Rest: 20*lg10|H(jw)|</span>
+<span class="comment">%semilogx(): x-achse wird logarythmisch aufgetragen</span>
+<span class="keyword">if</span>((x==5)||(x==6))
+    semilogx(f,mag)
+    ylabel(<span class="string">'|Z(jw)|'</span>);
+<span class="keyword">else</span>
+    semilogx(f,20*log10(mag))
+    ylabel(<span class="string">'20*log|H(jw)|'</span>);
+<span class="keyword">end</span>
+
+<span class="comment">%Beschriftet Diagramm, aktiviert Raster</span>
+title(<span class="string">'Magnitude'</span>);
+xlabel(<span class="string">'f'</span>);
+grid <span class="string">on</span>;
+
+<span class="comment">%w&auml;hlt Subplot 2 aus</span>
+subplot(2,1,2);
+
+<span class="comment">%semilogx(): x-achse wird logarythmisch aufgetragen</span>
+semilogx(f,radtodeg(phase))
+<span class="comment">%Beschriftet Diagramm, aktiviert Raster</span>
+title(<span class="string">'Phase'</span>);
+xlabel(<span class="string">'f'</span>);
+ylabel(<span class="string">'phi'</span>);
+grid <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="Uebertragungsfunktion_01.png" style="width:560px;height:420px;" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%Reibenwein Lukas 5AHEL KN 16 Uebertragungsfunktion.m
+function[]= Uebertragungsfunktion(KN,fstart,fende,Resx)
+%KN: Katalognummer Schüler
+%fstart, fende: Bestimmen Frequenzbereich, in dem simuliert wird
+%Resx: Anzahl Datenpunkte auf der x-Achse
+
+%Berechnet R, L und C
+R=KN*1000;
+L=KN*0.0001;
+C=KN*0.0000001;
+
+%Berechnet Array mit allen (Kreis-)Frequenzwerten zwischen fstart und fende
+%Auflösung: (fende-fstart)/Resx
+f=fstart:(fende-fstart)/Resx:fende;
+w=2*pi*f;
+
+%Bestimmt welches Beispiel ausgewählt wird
+x=mod(KN,12);
+
+for i=1:1:Resx+1
+    
+    %Berechnet komplexen Widerstand von L und C bei der aktuellen Frequenz
+    XL=1i*w(i)*L;
+    XC=(-1i)/(w(i)*C);
+    
+    %Berechnet, abhängig von der KN eine andere Übertragungsfunktion
+    if x==1
+        %RC-TP
+        H(i)=XC/(R+XC);
+    elseif x==2
+        %RL-HP
+        H(i)=XL/(R+XL);
+    elseif x==3
+        %RC-TP+Rp
+        H(i)=(1/(1/R+1/XC))/(R+(1/(1/R+1/XC)));
+    elseif x==4
+        %RC-HP+Rp
+        H(i)=(1/(1/R+1/XL))/(R+(1/(1/R+1/XL)));
+    elseif x==5
+        %Serienschwingkreis
+        H(i)=R+XL+XC;
+    elseif x==6
+        %Parallelschwingkreis
+        H(i)=1/(1/R+1/XL+1/XC);
+    elseif x==7
+        %CRC-Netzwerk
+        H(i)=XC/(1/(1/XC+1/(XC+R)));
+    elseif x==8
+        %RCR-Netzwerk
+        H(i)=(R+XC)/(R+XC);
+    elseif x==9
+        %LRL-Netzwerk
+        H(i)=XL/(1/(1/XL+1/(XL+R)));
+    elseif x==10
+        %RLR-Netzwerk
+        H(i)=(R+XL)/(R+XL);
+    elseif x==11
+        %CLC-Netzwerk(Serien+Parallelschwingkreis)
+        H(i)=XC/(1/(1/XC+1/(XC+XL)));
+    elseif x==0
+        %LCL-Netzwerk(Serien+Parallelschwingkreis)
+        H(i)=XL/(1/(1/XL+1/(XL+XC)));
+    end
+end
+
+%Teilt die komplexe Größe in Real- und Imaginärteil    
+mag=abs(H);
+phase=angle(H);
+
+%wählt Subplot 1 aus
+subplot(2,1,1);
+
+%Bei Bsp 5&6 Z(jw), da komplexer Widerstand gefragt
+%Beim Rest: 20*lg10|H(jw)|
+%semilogx(): x-achse wird logarythmisch aufgetragen
+if((x==5)||(x==6))
+    semilogx(f,mag)
+    ylabel('|Z(jw)|');
+else
+    semilogx(f,20*log10(mag))
+    ylabel('20*log|H(jw)|');
+end
+
+%Beschriftet Diagramm, aktiviert Raster
+title('Magnitude');      
+xlabel('f');
+grid on;
+
+%wählt Subplot 2 aus
+subplot(2,1,2);
+
+%semilogx(): x-achse wird logarythmisch aufgetragen
+semilogx(f,radtodeg(phase))
+%Beschriftet Diagramm, aktiviert Raster
+title('Phase');      
+xlabel('f');                
+ylabel('phi');            
+grid on;
+
+##### SOURCE END #####
+--></body></html>

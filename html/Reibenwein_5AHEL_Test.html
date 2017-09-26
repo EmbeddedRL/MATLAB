@@ -1,0 +1,192 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Reibenwein_5AHEL_Test</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-11-18"><meta name="DC.source" content="Reibenwein_5AHEL_Test.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Bestimmt die L&auml;nge des Signals und legt die Datenpunkte fest</a></li><li><a href="#3">Fenstert die Zeitfunktionen mit den jeweiligen Fensterfunktionen</a></li><li><a href="#4">Bildet Realteil der FFT des Original- und gefensterten Signals</a></li><li><a href="#5">Bestimmt cutoff und Skalierung f&uuml;r die FFT-Plots</a></li><li><a href="#6">Plotet Zeitsignal</a></li><li><a href="#7">Plotet DFT mit Rechteckfenster</a></li><li><a href="#8">Plotet DFT mit Hanningeckfenster</a></li><li><a href="#9">Plotet DFT mit Hammingeckfenster</a></li><li><a href="#10">Plotet DFT mit Kaisereckfenster</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span>[]= Reibenwein_5AHEL_Test(s,fs,window)
+</pre><h2>Bestimmt die L&auml;nge des Signals und legt die Datenpunkte fest<a name="2"></a></h2><pre class="codeinput">N=length(s);
+S=s(1/fs:1/fs++N-1);
+</pre><pre class="codeoutput">Warning: Integer operands are required for colon operator when used as index 
+</pre><h2>Fenstert die Zeitfunktionen mit den jeweiligen Fensterfunktionen<a name="3"></a></h2><pre class="codeinput">S_Hann=S*hann(N);
+S_Hamm=S*hamming(N);
+S_Kaiser=S*kaiser(N);
+</pre><h2>Bildet Realteil der FFT des Original- und gefensterten Signals<a name="4"></a></h2><pre class="codeinput">Y=abs(fft(S));
+Y_Hann=abs(fft(S_Hann));
+Y_Hamm=abs(fft(S_Hamm));
+Y_Kaiser=abs(fft(S_Kaiser));
+</pre><h2>Bestimmt cutoff und Skalierung f&uuml;r die FFT-Plots<a name="5"></a></h2><pre class="codeinput">cutoff=ceil(N/2);
+<span class="comment">%Berechnet diskrete Punkte f&uuml;r FFT-Plot</span>
+k=(0:N-1)*fs/N;
+</pre><h2>Plotet Zeitsignal<a name="6"></a></h2><pre class="codeinput">subplot(2,4,1);
+
+plot(s);
+xlabel(<span class="string">'t'</span>);
+ylabel(<span class="string">'Amplitude'</span>);
+title(<span class="string">'Zeitbereich'</span>);
+axis([0.05*fs 0.1*fs -2 2]);
+</pre><img vspace="5" hspace="5" src="Reibenwein_5AHEL_Test_01.png" style="width:560px;height:420px;" alt=""> <h2>Plotet DFT mit Rechteckfenster<a name="7"></a></h2><pre class="codeinput">subplot(2,4,2);
+semilogy(k,20*log10(Y/cutoff));
+
+xlabel(<span class="string">'f'</span>);
+ylabel(<span class="string">'Amplitude'</span>);
+title(<span class="string">'Frequenzspektrum'</span>);
+axis([0 fs 0 10]);
+</pre><img vspace="5" hspace="5" src="Reibenwein_5AHEL_Test_02.png" style="width:560px;height:420px;" alt=""> <h2>Plotet DFT mit Hanningeckfenster<a name="8"></a></h2><pre class="codeinput">subplot(2,4,3);
+semilogy(k,20*log10(Y_Hann/cutoff));
+
+xlabel(<span class="string">'f'</span>);
+ylabel(<span class="string">'Amplitude'</span>);
+title(<span class="string">'Frequenzspektrum Hann'</span>);
+axis([0 fs 0 10]);
+</pre><img vspace="5" hspace="5" src="Reibenwein_5AHEL_Test_03.png" style="width:560px;height:420px;" alt=""> <h2>Plotet DFT mit Hammingeckfenster<a name="9"></a></h2><pre class="codeinput">subplot(2,4,4);
+semilogy(k,20*log10(Y_Hamm/cutoff));
+
+xlabel(<span class="string">'f'</span>);
+ylabel(<span class="string">'Amplitude'</span>);
+title(<span class="string">'Frequenzspektrum Hamm'</span>);
+axis([0 fs 0 10]);
+</pre><img vspace="5" hspace="5" src="Reibenwein_5AHEL_Test_04.png" style="width:560px;height:420px;" alt=""> <h2>Plotet DFT mit Kaisereckfenster<a name="10"></a></h2><pre class="codeinput">subplot(2,4,5);
+semilogy(k,20*log10(Y_Kaiser/cutoff));
+
+xlabel(<span class="string">'f'</span>);
+ylabel(<span class="string">'Amplitude'</span>);
+title(<span class="string">'Frequenzspektrum Kaiser'</span>);
+axis([0 fs 0 10]);
+</pre><img vspace="5" hspace="5" src="Reibenwein_5AHEL_Test_05.png" style="width:560px;height:420px;" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function[]= Reibenwein_5AHEL_Test(s,fs,window)
+
+%% Bestimmt die Länge des Signals und legt die Datenpunkte fest
+N=length(s);
+S=s(1/fs:1/fs++N-1);
+
+%% Fenstert die Zeitfunktionen mit den jeweiligen Fensterfunktionen
+S_Hann=S*hann(N);
+S_Hamm=S*hamming(N);
+S_Kaiser=S*kaiser(N);
+
+%% Bildet Realteil der FFT des Original- und gefensterten Signals
+Y=abs(fft(S));
+Y_Hann=abs(fft(S_Hann));
+Y_Hamm=abs(fft(S_Hamm));
+Y_Kaiser=abs(fft(S_Kaiser));
+
+%%% Bestimmt cutoff und Skalierung für die FFT-Plots
+cutoff=ceil(N/2);
+%Berechnet diskrete Punkte für FFT-Plot
+k=(0:N-1)*fs/N;
+
+%% Plotet Zeitsignal
+subplot(2,4,1);
+
+plot(s);
+xlabel('t');
+ylabel('Amplitude');
+title('Zeitbereich');
+axis([0.05*fs 0.1*fs -2 2]);
+
+%% Plotet DFT mit Rechteckfenster
+subplot(2,4,2);
+semilogy(k,20*log10(Y/cutoff));
+
+xlabel('f');
+ylabel('Amplitude');
+title('Frequenzspektrum');
+axis([0 fs 0 10]);
+
+%% Plotet DFT mit Hanningeckfenster
+subplot(2,4,3);
+semilogy(k,20*log10(Y_Hann/cutoff));
+
+xlabel('f');
+ylabel('Amplitude');
+title('Frequenzspektrum Hann');
+axis([0 fs 0 10]);
+
+%% Plotet DFT mit Hammingeckfenster
+subplot(2,4,4);
+semilogy(k,20*log10(Y_Hamm/cutoff));
+
+xlabel('f');
+ylabel('Amplitude');
+title('Frequenzspektrum Hamm');
+axis([0 fs 0 10]);
+
+%% Plotet DFT mit Kaisereckfenster
+subplot(2,4,5);
+semilogy(k,20*log10(Y_Kaiser/cutoff));
+
+xlabel('f');
+ylabel('Amplitude');
+title('Frequenzspektrum Kaiser');
+axis([0 fs 0 10]);
+end
+    
+
+
+##### SOURCE END #####
+--></body></html>
