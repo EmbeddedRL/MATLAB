@@ -1,0 +1,14 @@
+
+cd
+
+addpath
+editpath
+setpath
+
+what
+which
+
+assert(nargin==3,'blabla')
+assert(isnumeric([a b c]),'biahdals')
+assert(~any(isinf([a b c])),'biahdals')
+assert(~any(isnan([a b c])),'biahdals')
